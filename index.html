@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>아인운 AINUN -</title>
+<title>아인운 AINUN - Dari Nganggur Jadi Ada Kerjaan</title>
 <style>
 :root{--bg:#E8F0F4;--card:#FFF;--text:#2C3E50;--accent:#4A7C8A;--accent-dark:#3E6A77;--border:#D0E0E7;--shadow:0 4px 15px rgba(74,124,138,0.12);--chat-me:#DCF8C6}
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif}
@@ -117,10 +117,6 @@ footer{background:var(--card);text-align:center;padding:20px;margin-top:50px;bor
 #gambarFull {max-width:90%; max-height:90%; border-radius:10px; cursor:zoom-out}
 .modal-content { max-height: 90vh; overflow-y: auto; } /* BIAR BISA SCROLL */
 
-.btn-paket{padding:15px; border:2px solid var(--border); border-radius:10px; background:white; cursor:pointer; text-align:center}
-.btn-paket:hover{border-color:var(--accent)}
-.btn-paket.active{border-color:var(--accent); background:#E8F4F8}
-
 </style>
 </head>
 <body>
@@ -137,7 +133,6 @@ footer{background:var(--card);text-align:center;padding:20px;margin-top:50px;bor
       <button class="btn-sm btn-menu" onclick="showPage('friendsPage',this)">👥 TEMAN <span id="badgeTeman" class="notif-badge">0</span></button>
       <button class="btn-sm btn-menu" onclick="showPage('chatPage',this)">💬 CHAT <span id="badgeChat" class="notif-badge">0</span></button>
       <button class="btn-sm btn-menu" onclick="showPage('myProfilePage',this)">👤 PROFIL</button>
-      <button class="btn-sm btn-menu" onclick="showPage('adminPage',this)" id="btnAdmin" style="display:none">⚙️ ADMIN</button>
       <button class="btn-sm btn-cs" onclick="openModal('cs')">💬 CS</button>
     </div>
    <div class="menu-btn" id="menuBtn">
@@ -243,36 +238,10 @@ footer{background:var(--card);text-align:center;padding:20px;margin-top:50px;bor
   </div>
   <div class="card"><h3>👥 Teman (<span id="myJumlahTeman2">0</span>)</h3><div id="daftarTemanProfil" class="teman-grid"><p>Belum ada teman</p></div></div>
 </div>
+
 <div class="modal" id="login"><div class="modal-content"><h2>LOGIN</h2><input class="input" type="email" id="loginEmail" placeholder="Email"><input class="input" type="password" id="loginPass" placeholder="Password"><button class="btn" style="width:100%" onclick="loginUser()">MASUK</button><button class="btn btn-batal" onclick="closeModal('login')">TUTUP</button></div></div>
 <div class="modal" id="daftar"><div class="modal-content"><h2>DAFTAR</h2><input class="input" type="text" id="daftarNama" placeholder="Nama"><input class="input" type="email" id="daftarEmail" placeholder="Email"><input class="input" type="password" id="daftarPass" placeholder="Password"><label><input type="checkbox" id="setujuTOS"> Saya setuju TOS</label><button class="btn" style="width:100%" onclick="daftarUser(event)">DAFTAR</button><button class="btn btn-batal" onclick="closeModal('daftar')">TUTUP</button></div></div>
-<div class="modal" id="topup">
-  <div class="modal-content">
-    <h2>PILIH PAKET TOP UP</h2>
-    <p style="color:gray">Admin 16%. Transfer dulu baru upload bukti</p>
-    <p style="font-weight:bold; color:#25D366">No DANA Admin: 0812-3456-7890</p>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:15px 0">
-      <button class="btn-paket" onclick="pilihPaket(20000, 23200)">
-        <b>20.000 Koin</b><br><small>Rp 23.200</small>
-      </button>
-      <button class="btn-paket" onclick="pilihPaket(50000, 58000)">
-        <b>50.000 Koin</b><br><small>Rp 58.000</small>
-      </button>
-      <button class="btn-paket" onclick="pilihPaket(100000, 116000)" style="grid-column: span 2">
-        <b>100.000 Koin</b><br><small>Rp 116.000</small>
-      </button>
-    </div>
-
-    <input type="hidden" id="topupJumlah">
-    <input type="hidden" id="topupBayar">
-    <p id="infoPaket" style="color:gray; text-align:center; min-height:40px">Pilih paket dulu</p>
-    
-    <p style="font-weight:bold; margin-top:10px">Upload Bukti Transfer</p>
-    <input type="file" id="inputBuktiTopup" accept="image/*" class="input">
-    <button class="btn" onclick="requestTopup()">KIRIM REQUEST</button>
-    <button class="btn btn-batal" onclick="closeModal('topup')">TUTUP</button>
-  </div>
-</div>
+<div class="modal" id="topup"><div class="modal-content"><h2>TOP UP KOIN VIA DANA</h2><p>Admin 16%</p><button class="btn" onclick="pilihNominal(10000)">10.000 Koin = Rp 11.600</button><button class="btn" onclick="pilihNominal(50000)">50.000 Koin = Rp 58.000</button><button class="btn" onclick="topupKoin()">BAYAR VIA DANA</button><button class="btn btn-batal" onclick="closeModal('topup')">TUTUP</button></div></div>
 <div class="modal" id="withdraw">
   <div class="modal-content">
     <h2>WITHDRAW KOIN VIA DANA</h2>
@@ -290,19 +259,22 @@ footer{background:var(--card);text-align:center;padding:20px;margin-top:50px;bor
     <input class="input" id="deskripsiPost" placeholder="Detail">
     <input class="input" type="number" id="hadiahPost" placeholder="Reward Koin">
     <input class="input" id="noWaPost" placeholder="No WA 628xxx">
+
     <p style="font-weight:bold; margin-top:10px">Upload Gambar Job [Opsional]</p>
     <input type="file" id="inputGambarJob" accept="image/*" class="input" onchange="previewGambarJob(event)">
     <p id="namaFileJob" style="font-size:12px; color:gray; margin-top:-5px"></p>
+
     <button class="btn" onclick="buatPost(event)">POST & KUNCI DANA</button>
     <button class="btn btn-batal" onclick="closeModal('post')">TUTUP</button>
   </div>
 </div>
 
+<!-- TAMBAH MODAL BARU INI PALING BAWAH SEBELUM </div> TERAKHIR -->
 <div class="modal" id="gambarFullModal" onclick="closeModal('gambarFullModal')">
   <img id="gambarFull">
 </div>
 <div class="modal" id="editProfile"><div class="modal-content"><h2>EDIT PROFIL</h2><input class="input" id="editNama" placeholder="Nama"><input class="input" id="editSkill" placeholder="Skill"><input class="input" id="editBio" placeholder="Bio"><input class="input" id="editNoWa" placeholder="No WA 628xxx"><input class="input" type="date" id="editTgl" placeholder="Tanggal Lahir"><input class="input" id="editSekolah" placeholder="Sekolah/Kampus"><input class="input" id="editYoutube" placeholder="Link Youtube"><button class="btn" style="width:100%" onclick="saveProfile()">SIMPAN</button><button class="btn btn-batal" onclick="closeModal('editProfile')">TUTUP</button></div></div>
-<div class="modal" id="cs"><div class="modal-content"><h2>💬 CUSTOMER SERVICE</h2><p>Butuh bantuan? Chat admin Ainun</p><a href="https://wa.me/62812xxxx" target="_blank" class="btn" style="width:100%;background:#25D366">CHAT WA ADMIN</a><button class="btn btn-batal" onclick="closeModal('cs')">TUTUP</button></div></div>
+<div class="modal" id="cs"><div class="modal-content"><h2>💬 CUSTOMER SERVICE</h2><p>Butuh bantuan? Chat admin Ainun</p><a href="https://" target="_blank" class="btn" style="width:100%;background:#25D366">CHAT WA ADMIN</a><button class="btn btn-batal" onclick="closeModal('cs')">TUTUP</button></div></div>
 <div class="modal" id="uploadVideo">
   <div class="modal-content">
     <h2>TAMBAH VIDEO</h2>
@@ -332,23 +304,6 @@ footer{background:var(--card);text-align:center;padding:20px;margin-top:50px;bor
     <div id="bintangWrap"></div>
   </div>
 </div>
-
-
-
-<div id="adminPage" class="container" style="display:none">
-  <h2>⚙️ PANEL ADMIN</h2>
-  
-  <div class="card">
-    <h3>📥 Request Topup Pending</h3>
-    <div id="daftarTopupAdmin"></div>
-  </div>
-
-  <div class="card">
-    <h3>🏦 Request Withdraw Pending</h3>
-    <div id="daftarWithdrawAdmin"></div>
-  </div>
-</div>
-
 
 <footer>ainunsukamto.vercel.app 2026</footer>
 </div>
@@ -383,252 +338,10 @@ async function compressImage(file, maxSize = 800) {
   });
 }
 
-// CUMA 1X DI SINI
-let saldoSekarang = 0; let userLogin = null; let convAktif = null; let ratingJobId = ''; let skorRating = 0;
-let jumlahNotifChat = 0; let jumlahNotifTeman = 0; let channelChat = null; let jobSelesaiId = ''; let pekerjaRatingId = '';let fileGambarJob = null;
+let saldoSekarang = 0; let userLogin = null; let nominalTopup = 0; let convAktif = null; let ratingJobId = ''; let skorRating = 0; let jumlahNotifChat = 0; let jumlahNotifTeman = 0; let channelChat = null; let jobSelesaiId = ''; let pekerjaRatingId = '';let fileGambarJob = null;
 
-// KODE BARU TOPUP + WITHDRAW
-let paketTerpilih = null;
-window.pilihPaket = function(koin, bayar){
-  paketTerpilih = koin;
-  document.getElementById('topupJumlah').value = koin;
-  document.getElementById('topupBayar').value = bayar;
-  document.getElementById('infoPaket').innerText = `Kamu pilih ${koin.toLocaleString()} Koin. Transfer Rp ${bayar.toLocaleString()}`;
-  
-  document.querySelectorAll('.btn-paket').forEach(b=>b.classList.remove('active'));
-  event.target.closest('.btn-paket').classList.add('active');
-}
-
-window.requestTopup = async function(){
-  if(!userLogin) return alert("Login dulu");
-  const jumlah = parseInt(document.getElementById('topupJumlah').value);
-  const bayar = parseInt(document.getElementById('topupBayar').value);
-  const file = document.getElementById('inputBuktiTopup').files[0];
-  if(!jumlah ||!bayar ||!file) return alert("Isi semua + upload bukti");
-  try {
-    const compressedFile = await compressImage(file, 1000);
-    const filePath = `topup/${userLogin.id}-${Date.now()}.jpg`;
-    const { error: upErr } = await supabase.storage.from('bukti-topup').upload(filePath, compressedFile);
-    if(upErr) throw upErr;
-    const { data } = supabase.storage.from('bukti-topup').getPublicUrl(filePath);
-    await supabase.from('topup_requests').insert({
-      user_id: userLogin.id, jumlah_koin: jumlah, bayar_rupiah: bayar, bukti_bayar_url: data.publicUrl, status: 'pending'
-    });
-    alert("Request terkirim! Tunggu admin konfirmasi 1x24 jam");
-    closeModal('topup');
-  } catch(err) { alert('Gagal: ' + err.message) }
-}
-
-window.ajukanWithdraw = async function(){
-  const jumlah = parseInt(document.getElementById('jumlahWithdraw').value);
-  const noDana = document.getElementById('noDanaWithdraw').value.trim();
-  
-  if(!jumlah || !noDana) return alert("Isi semua dulu");
-  if(jumlah < 10000) return alert("Minimal withdraw 10.000 Koin");
-  if(jumlah > saldoSekarang) return alert("Saldo tidak cukup");
-  if(noDana.length < 10) return alert("No DANA tidak valid");
-
-  const feeAdmin = Math.floor(jumlah * 0.16);
-  const diterimaUser = jumlah - feeAdmin;
-
-  // Konfirmasi dulu
-  if(!confirm(`Yakin withdraw ${jumlah.toLocaleString()} Koin?\nFee 16%: ${feeAdmin.toLocaleString()} Koin\nDiterima: ${diterimaUser.toLocaleString()} Koin`)) return;
-
-  try {
-    // 1. KURANGI SALDO USER LANGSUNG
-    const saldoBaru = saldoSekarang - jumlah;
-    const { error: errSaldo } = await supabase.from('users').update({saldo_koin: saldoBaru}).eq('id', userLogin.id);
-    if(errSaldo) throw errSaldo;
-
-    // 2. INSERT KE TABEL withdraw_requests
-    const { error: errReq } = await supabase.from('withdraw_requests').insert({
-      user_id: userLogin.id,
-      jumlah_koin: jumlah,
-      no_dana: noDana,
-      diterima_koin: diterimaUser, // kolom baru
-      fee_admin: feeAdmin, // kolom baru
-      status: 'pending'
-    });
-    
-    if(errReq) {
-      // KALAU GAGAL INSERT, BALIKIN SALDO
-      await supabase.from('users').update({saldo_koin: saldoSekarang}).eq('id', userLogin.id);
-      throw errReq;
-    }
-
-    // 3. UPDATE UI
-    saldoSekarang = saldoBaru;
-    updateSaldoUI();
-
-    alert(`PENGAJUAN DITERIMA\nWithdraw: ${jumlah.toLocaleString()} Koin\nFee 16%: ${feeAdmin.toLocaleString()} Koin\nDiterima: ${diterimaUser.toLocaleString()} Koin ke ${noDana}`);
-    
-    closeModal('withdraw');
-    document.getElementById('jumlahWithdraw').value = '';
-    document.getElementById('infoWithdrawFee').innerHTML = '';
-    
-  } catch(err) { 
-    alert('Gagal: ' + err.message);
-    console.error(err);
-  }
-}
 window.openModal = function(id){ document.getElementById(id).style.display = 'flex'; }
-async function loadAdminPanel(){
-  if(!userLogin || userLogin.role !== 'admin') return;
-  
-  // ========== 1. LOAD TOPUP ==========
-  const containerTopup = document.getElementById('daftarTopupAdmin'); 
-  containerTopup.innerHTML = '<p>Loading...</p>';
-
-  const { data: topup, error } = await supabase
-    .from('topup_requests')
-    .select('*')
-    .eq('status','pending')
-    .order('created_at', {ascending:false});
-  
-  if(error){ console.error(error); containerTopup.innerHTML = '<p>Error: '+error.message+'</p>'; }
-  else if(!topup || topup.length === 0){ 
-    containerTopup.innerHTML = '<p>Tidak ada request topup</p>'; 
-  } else {
-    containerTopup.innerHTML = '';
-    for(const t of topup){
-      const { data: user } = await supabase.from('users').select('nama,foto').eq('id', t.user_id).single();
-      
-      containerTopup.innerHTML += `
-      <div class="permintaan-item" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:10px">
-        <div>
-          <img src="${user?.foto || 'https://i.ibb.co/5x1g2zF/default.png'}" style="width:40px;height:40px;border-radius:50%; object-fit:cover; margin-right:10px"> 
-          <b>${user?.nama || 'User'}</b><br>
-          Request: <b>${t.jumlah_koin} Koin</b> = Rp <b>${t.bayar_rupiah.toLocaleString()}</b><br>
-          <a href="${t.bukti_bayar_url}" target="_blank">LIHAT BUKTI</a>
-        </div>
-        <div>
-          <button class="btn btn-sukses" onclick="setujuiTopup('${t.id}', '${t.user_id}', ${t.jumlah_koin})">SETUJUI</button>
-          <button class="btn btn-batal" onclick="tolakTopup('${t.id}')">TOLAK</button>
-        </div>
-      </div>`
-    }
-  }
-
-  // ========== 2. LOAD WITHDRAW ==========
-  const containerWithdraw = document.getElementById('daftarWithdrawAdmin'); 
-  containerWithdraw.innerHTML = '<p>Loading...</p>';
-
-  const { data: withdraw, error: errW } = await supabase
-    .from('withdraw_requests')
-    .select('*')
-    .eq('status','pending')
-    .order('created_at', {ascending:false});
-
-  if(errW){ console.error(errW); containerWithdraw.innerHTML = '<p>Error: '+errW.message+'</p>'; }
-  else if(!withdraw || withdraw.length === 0){ 
-    containerWithdraw.innerHTML = '<p>Tidak ada request withdraw</p>'; 
-  } else {
-    containerWithdraw.innerHTML = '';
-    for(const w of withdraw){
-      const { data: user } = await supabase.from('users').select('nama,foto').eq('id', w.user_id).single();
-
-      containerWithdraw.innerHTML += `
-      <div class="permintaan-item" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:10px">
-        <div>
-          <img src="${user?.foto || 'https://i.ibb.co/5x1g2zF/default.png'}" style="width:40px;height:40px;border-radius:50%; object-fit:cover; margin-right:10px"> 
-          <b>${user?.nama || 'User'}</b><br>
-          Request: <b>${w.jumlah_koin.toLocaleString()} Koin</b><br>
-          Diterima: <b>${w.diterima_koin.toLocaleString()} Koin</b> ke DANA <b>${w.no_dana}</b><br>
-          Fee Admin: <b>${w.fee_admin.toLocaleString()} Koin</b>
-        </div>
-        <div>
-          <button class="btn btn-sukses" onclick="setujuiWithdraw('${w.id}')">SETUJUI</button>
-          <button class="btn btn-batal" onclick="tolakWithdraw('${w.id}')">TOLAK</button>
-        </div>
-      </div>`
-    }
-  }
-}
-
-window.setujuiWithdraw = async function(id){
-  const {data:w} = await supabase.from('withdraw_requests').select('*').eq('id', id).single();
-  await supabase.from('wallet_sistem').insert({dari_user_id: w.user_id, tipe: 'fee_admin', jumlah: w.fee_admin, keterangan: `Fee 16% Withdraw ID: ${id}`});
-  await supabase.from('withdraw_requests').update({status: 'disetujui'}).eq('id', id);
-  alert('Withdraw disetujui. Silahkan transfer ke DANA user');
-  loadAdminPanel();
-}
-
-window.tolakWithdraw = async function(id){
-  const {data:w} = await supabase.from('withdraw_requests').select('*').eq('id', id).single();
-  const {data:user} = await supabase.from('users').select('saldo_koin').eq('id', w.user_id).single();
-  await supabase.from('users').update({saldo_koin: user.saldo_koin + w.jumlah_koin}).eq('id', w.user_id);
-  await supabase.from('withdraw_requests').update({status: 'rejected'}).eq('id', id);
-  alert('Withdraw ditolak. Saldo dikembalikan');
-  loadAdminPanel();
-}
-
-window.setujuiTopup = async function(requestId){
-  const kodeInduk = prompt(`Masukkan Kode Indukan:`);
-  if(!kodeInduk) return alert("Batal. Kode wajib diisi");
-  const kodeHasil = 'BITERA-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-
-  try {
-    // 1. Ambil data request dulu
-    const {data:req, error:err1} = await supabase
-     .from('topup_requests')
-     .select('user_id, jumlah_koin, status')
-     .eq('id', requestId).single();
-    
-    if(err1) throw err1
-    if(req.status === 'disetujui') return alert("Request ini sudah disetujui sebelumnya")
-
-    const jumlahKoin = req.jumlah_koin;
-    const adminFee = Math.floor(jumlahKoin * 0.16); // Fee 16%
-
-    // 2. PAKAI RPC: Cek kode + kurangi sisa_nilai + update status
-    const {data: rpcData, error: rpcError} = await supabase.rpc('pakai_koin_induk', {
-      p_kode: kodeInduk,
-      p_user_id: req.user_id,
-      p_jumlah_dipakai: jumlahKoin
-    })
-
-    if(rpcError) throw rpcError
-    if(rpcData?.error) return alert('Gagal: ' + rpcData.error) // "Kode sudah dipakai" dll
-
-    // 3. Update topup_requests jadi disetujui
-    await supabase.from('topup_requests').update({
-      status: 'disetujui',
-      serial_induk_asal: kodeInduk,
-      serial_koin_hasil: [kodeHasil]
-    }).eq('id', requestId);
-
-    // 4. CATAT FEE KE wallet_sistem
-    await supabase.from('wallet_sistem').insert({
-      dari_user_id: req.user_id,
-      tipe: 'fee_admin',
-      jumlah: adminFee,
-      keterangan: `Fee 16% Topup ID: ${requestId}`,
-      relasi_id: requestId
-    });
-
-    // 5. CATAT KE riwayat_koin hasil buat user
-    await supabase.from('koin_induk').insert({
-      serial_induk: kodeHasil, 
-      nilai_total: jumlahKoin, 
-      sisa_nilai: jumlahKoin, 
-      status: 'aktif',
-      dipakai_oleh: req.user_id
-    });
-
-    alert(`Berhasil! User +${jumlahKoin} koin. Admin +${adminFee} koin. Sisa kode induk: ${rpcData.sisa}`);
-    loadAdminPanel();
-  } catch(err){ 
-    alert('Gagal: ' + err.message) 
-    console.error(err)
-  }
-}
-window.tolakTopup = async function(id){
-  await supabase.from('topup_requests').update({status: 'rejected'}).eq('id', id);
-  alert('Topup ditolak');
-  loadAdminPanel();
-}
 window.closeModal = function(id){ document.getElementById(id).style.display = 'none'; }
-
 function updateSaldoUI() { document.getElementById('saldoText').innerText = saldoSekarang.toLocaleString(); }
 function updateBadgeChat(){ const badge = document.getElementById('badgeChat'); badge.style.display = jumlahNotifChat > 0? 'flex' : 'none'; badge.innerText = jumlahNotifChat; }
 function updateBadgeTeman(){ const badge = document.getElementById('badgeTeman'); badge.style.display = jumlahNotifTeman > 0? 'flex' : 'none'; badge.innerText = jumlahNotifTeman; }
@@ -696,46 +409,27 @@ window.cariTeman = async function(){
 }
 window.pilihNominal = function(j){ nominalTopup = j; alert(`Bayar: Rp ${(j*1.16).toLocaleString()}`) }
 window.topupKoin = function(){ if(!nominalTopup) return alert("Pilih nominal dulu"); const bayar = Math.ceil(nominalTopup * 1.16); alert(`FITUR TOPUP BELUM AKTIF\nSilahkan transfer Rp ${bayar.toLocaleString()} ke DANA: 0812-xxxx-xxxx\nLalu kirim bukti ke CS`); closeModal('topup'); nominalTopup = 0; }
-
+window.ajukanWithdraw = function(){
+  const jumlah = parseInt(document.getElementById('jumlahWithdraw').value);
+  const noDana = document.getElementById('noDanaWithdraw').value;
+  if(!jumlah || !noDana) return alert("Isi semua dulu");
+  if(jumlah < 10000) return alert("Minimal withdraw 10.000 Koin");
+  if(jumlah > saldoSekarang) return alert("Saldo tidak cukup");
+  
+  const diterima = Math.floor(jumlah * 0.9);
+  alert(`PENGAJUAN DITERIMA\nWithdraw: ${jumlah.toLocaleString()} Koin\nDiterima: Rp ${diterima.toLocaleString()} ke ${noDana}\n\nHubungi CS untuk proses`);
+  closeModal('withdraw');
+}
 window.daftarUser = async function(event) {
   const btn = event.target; btn.disabled = true; btn.innerText = "MENDAFTAR...";
-  const nama = document.getElementById('daftarNama').value; 
-  const email = document.getElementById('daftarEmail').value; 
-  const pass = document.getElementById('daftarPass').value;
-  
-  if(!nama ||!email ||!pass) { 
-    alert("Isi semua dulu"); 
-    btn.disabled = false; 
-    btn.innerText = "DAFTAR"; 
-    return; 
-  }
-
-  const { data, error } = await supabase.auth.signUp({ email: email, password: pass });
-  if(error) { 
-    alert('Gagal Daftar Auth: ' + error.message); 
-    btn.disabled = false; 
-    btn.innerText = "DAFTAR"; 
-    return; 
-  }
-
-  const { error: insertError } = await supabase.from('users').insert({ 
-    id: data.user.id, 
-    nama: nama, 
-    email: email, 
-    saldo_koin: 0, 
-    role: 'user' 
-  }); // <-- INI WAJIB ADA ; 
-
-  btn.disabled = false;  // <-- BARU LANJUT KE SINI
-  btn.innerText = "DAFTAR";
-
-  if(insertError) {
-    alert('Gagal simpan ke users: ' + insertError.message);
-    return;
-  }
-  
-  alert('Daftar berhasil!'); 
-  closeModal('daftar');
+  const nama = document.getElementById('daftarNama').value; const email = document.getElementById('daftarEmail').value; const pass = document.getElementById('daftarPass').value;
+  if(!nama ||!email ||!pass) { alert("Isi semua dulu"); btn.disabled = false; btn.innerText = "DAFTAR"; return; }
+  const { data, error } = await supabase.auth.signUp({ email: email, password: pass, });
+  if(error) { alert('Gagal Daftar Auth: ' + error.message); btn.disabled = false; btn.innerText = "DAFTAR"; return; }
+  const { error: insertError } = await supabase.from('users').insert({ id: data.user.id, nama: nama, email: email, saldo: 0, role: 'user' })
+  btn.disabled = false; btn.innerText = "DAFTAR";
+  if(insertError) return alert('Gagal simpan ke users: ' + insertError.message)
+  alert('Daftar berhasil!'); closeModal('daftar');
 }
 window.loginUser = async function() {
   const email = document.getElementById('loginEmail').value; const pass = document.getElementById('loginPass').value;
@@ -744,28 +438,19 @@ window.loginUser = async function() {
   if(error) return alert('Gagal: ' + error.message);
   const { data: userData } = await supabase.from('users').select('*').eq('id', data.user.id).single();
   userLogin = userData; localStorage.setItem('ainun_user', JSON.stringify(userData));
- saldoSekarang = userData.saldo_koin || 0;
- updateSaldoUI(); updateUI(true); loadMyProfile(); closeModal('login');
+  saldoSekarang = userData.saldo || 0; updateSaldoUI(); updateUI(true); loadMyProfile(); closeModal('login');
 }
 function updateUI(isLogin) {
   const menuBtn = document.getElementById('menuBtn');
   if(isLogin){
     menuBtn.innerHTML = `<button class="btn-sm btn-batal" onclick="logout()">LOGOUT</button>`;
-    
-    // TAMBAHIN INI DI SINI
-    if(userLogin.role === 'admin'){
-      document.getElementById('btnAdmin').style.display = 'block';
-    } else {
-      document.getElementById('btnAdmin').style.display = 'none';
-    }
-
-  } else {
+  }
+  else {
     menuBtn.innerHTML = `<button class="btn-sm btn-login" onclick="openModal('login')">LOGIN</button><button class="btn-sm btn-daftar" onclick="openModal('daftar')">DAFTAR</button>`;
     document.getElementById('daftarPenyedia').innerHTML = '';
     document.getElementById('daftarJob').innerHTML = '';
     document.getElementById('daftarTeman').innerHTML = '';
     document.getElementById('daftarVideo').innerHTML = '';
-    document.getElementById('btnAdmin').style.display = 'none'; // sembunyikan lagi pas logout
     saldoSekarang = 0; updateSaldoUI();
     showPage('homePage');
   } 
@@ -817,7 +502,7 @@ window.buatPost = async function(event) {
   }
 
   const saldoBaru = saldoSekarang - hadiah;
-  const { error: saldoErr } = await supabase.from('users').update({saldo_koin: saldoBaru}).eq('id', userLogin.id);
+  const { error: saldoErr } = await supabase.from('users').update({saldo: saldoBaru}).eq('id', userLogin.id);
   if(saldoErr) { alert(saldoErr.message); btn.disabled = false; btn.innerText = "POST & KUNCI DANA"; return; }
 
   const { error } = await supabase.from('jobs').insert({
@@ -1041,34 +726,28 @@ window.kirimRating = async function(){
   if(skorRating === 0) return alert("Pilih bintang dulu");
   try {
     const { data: job } = await supabase.from('jobs').select('harga, user_id').eq('id', ratingJobId).single();
-    // AMBIL SEMUA SEKALIGUS
-    const { data: pekerja } = await supabase.from('users').select('saldo_koin, total_rating, jumlah_rating').eq('id', pekerjaRatingId).single();
-
-    const total = job.harga;
+    const { data: pekerja } = await supabase.from('users').select('saldo, total_rating, jumlah_rating').eq('id', pekerjaRatingId).single();
+    const { data: wallet } = await supabase.from('wallet').select('saldo').eq('id', 1).single();
+    if(!wallet) throw new Error("Tabel wallet belum ada. Jalankan SQL: insert into wallet (id, saldo) values (1,0)");
+    const total = job.harga; 
     const adminCut = Math.ceil(total * 0.16);
     const pekerjaDapat = total - adminCut;
-
-    // 1. CETAK KOIN KE PEKERJA
     await supabase.from('users').update({ 
-      saldo_koin: (pekerja.saldo_koin||0) + pekerjaDapat,
-      total_rating: pekerja.total_rating + skorRating,
-      jumlah_rating: pekerja.jumlah_rating + 1
+      saldo: pekerja.saldo + pekerjaDapat, 
+      total_rating: pekerja.total_rating + skorRating, 
+      jumlah_rating: pekerja.jumlah_rating + 1 
     }).eq('id', pekerjaRatingId);
-
-    // 2. CATAT FEE KE wallet_sistem
-    await supabase.from('wallet_sistem').insert({
-      dari_user_id: job.user_id,
-      tipe: 'fee_admin',
-      jumlah: adminCut,
-      keterangan: `Fee 16% Job ID: ${ratingJobId}`,
-      relasi_id: ratingJobId
+    await supabase.from('wallet').update({ saldo: wallet.saldo + adminCut }).eq('id', 1);
+    await supabase.from('wallet_sistem').insert({ 
+      dari_user_id: job.user_id, 
+      tipe: 'fee_admin', 
+      jumlah: adminCut, 
+      keterangan: `Fee 16% Job ID: ${ratingJobId}`, 
+      relasi_id: ratingJobId 
     });
-
-    // 3. SELESAIKAN JOB
     await supabase.from('jobs').update({status: 'selesai'}).eq('id', ratingJobId);
-    
     closeModal('ratingModal');
-    alert(`✅ Selesai!\nPekerja: ${pekerjaDapat} Koin\nAdmin: ${adminCut} Koin masuk Kas`);
+    alert(`✅ Selesai!\nPekerja: ${pekerjaDapat} Koin\nAdmin: ${adminCut} Koin`);
     loadJobs();
     loadMyProfile();
   } catch(err) {
@@ -1076,6 +755,7 @@ window.kirimRating = async function(){
     alert('Gagal kirim rating: ' + err.message);
   }
 }
+
 function subscribeRealtime(convId){
   if(channelChat) supabase.removeChannel(channelChat);
   channelChat = supabase.channel(`chat-${convId}`).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter:`conversation_id=eq.${convId}` }, payload => {
@@ -1183,7 +863,7 @@ async function loadMyProfile(){
   const {data, error} = await supabase.from('users').select('*').eq('id', userLogin.id).single(); 
   if(error) { console.log("Error load profil:", error); return; }
   if(data){ 
-   saldoSekarang = data.saldo_koin || 0;
+    saldoSekarang = data.saldo || 0;
     updateSaldoUI();
     document.getElementById('myNama').innerText = data.nama; 
     document.getElementById('mySkill').innerText = data.skill||'-'; 
@@ -1303,7 +983,6 @@ window.showPage = function(pageId, el){
   if(pageId==='myProfilePage') { loadMyProfile(); loadTemanDiProfil(); }
   if(pageId==='videosPage') loadVideos();
   if(pageId==='chatPage') { loadDaftarChat(); }
-  if(pageId==='adminPage') loadAdminPanel();
 }
 
 window.cariPenyedia = async function(){
@@ -1393,7 +1072,7 @@ supabase.auth.getSession().then(async ({ data: { session }}) => {
         localStorage.setItem('ainun_user', JSON.stringify(userData));
       }
     } catch(e) { console.log(e) }
-    saldoSekarang = userLogin.saldo_koin || 0;
+    saldoSekarang = userLogin.saldo || 0;
     updateSaldoUI();
     updateUI(true);
     loadMyProfile(); 
