@@ -421,15 +421,56 @@ window.ajukanWithdraw = function(){
   closeModal('withdraw');
 }
 window.daftarUser = async function(event) {
-  const btn = event.target; btn.disabled = true; btn.innerText = "MENDAFTAR...";
-  const nama = document.getElementById('daftarNama').value; const email = document.getElementById('daftarEmail').value; const pass = document.getElementById('daftarPass').value;
-  if(!nama ||!email ||!pass) { alert("Isi semua dulu"); btn.disabled = false; btn.innerText = "DAFTAR"; return; }
-  const { data, error } = await supabase.auth.signUp({ email: email, password: pass, });
-  if(error) { alert('Gagal Daftar Auth: ' + error.message); btn.disabled = false; btn.innerText = "DAFTAR"; return; }
-  const { error: insertError } = await supabase.from('users').insert({ id: data.user.id, nama: nama, email: email, saldo: 0, role: 'user' })
-  btn.disabled = false; btn.innerText = "DAFTAR";
-  if(insertError) return alert('Gagal simpan ke users: ' + insertError.message)
-  alert('Daftar berhasil!'); closeModal('daftar');
+  const btn = event.target; 
+  if(btn.disabled) return; // cegah spam click
+  
+  btn.disabled = true; 
+  btn.innerText = "MENDAFTAR...";
+  
+  const nama = document.getElementById('daftarNama').value.trim(); 
+  const email = document.getElementById('daftarEmail').value.trim(); 
+  const pass = document.getElementById('daftarPass').value;
+  
+  if(!nama || !email || !pass) { 
+    alert("Isi semua dulu"); 
+    btn.disabled = false; 
+    btn.innerText = "DAFTAR"; 
+    return; 
+  }
+
+  // 1. DAFTAR AUTH DULU
+  const { data, error } = await supabase.auth.signUp({ 
+    email: email, 
+    password: pass
+  });
+  
+  if(error) { 
+    alert('Gagal Daftar Auth: ' + error.message); 
+    btn.disabled = false; 
+    btn.innerText = "DAFTAR"; 
+    return; 
+  }
+
+  // 2. INSERT KE TABEL USERS
+  const { error: insertError } = await supabase.from('users').insert({ 
+    id: data.user.id, 
+    nama: nama, 
+    email: email, 
+    saldo_koin: 0, // <- FIX: GANTI JADI saldo_koin
+    role: 'user' 
+  });
+
+  btn.disabled = false; 
+  btn.innerText = "DAFTAR";
+
+  // 3. KALAU GAGAL INSERT, HAPUS AKUN AUTH NYA BIAR GA NUMPUK
+  if(insertError) {
+    await supabase.auth.signOut(); // hapus yg setengah jadi
+    return alert('Gagal simpan ke users: ' + insertError.message);
+  }
+
+  alert('Daftar berhasil! Silakan login');
+  closeModal('daftar');
 }
 window.loginUser = async function() {
   const email = document.getElementById('loginEmail').value; const pass = document.getElementById('loginPass').value;
